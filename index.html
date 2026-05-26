@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Turistic — Grilă Examen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --gold: #e6b84a;
+    --gold-dim: #7a5c1a;
+    --green: #3fb950;
+    --green-bg: rgba(63,185,80,0.12);
+    --red: #f85149;
+    --red-bg: rgba(248,81,73,0.12);
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(230,184,74,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; right: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(88,166,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 760px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  header .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  header h1 span { color: var(--gold); }
+
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 99px;
+    margin: 2rem 0 1.5rem;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem 2rem 1.6rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .q-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+  }
+
+  .q-number {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .q-badge {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.6rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text);
+    font-weight: 400;
+    margin-bottom: 1.6rem;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .option-btn {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--gold-dim);
+    background: rgba(230,184,74,0.06);
+    transform: translateX(3px);
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .option-letter {
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-bg);
+  }
+
+  .option-btn.correct .option-letter {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: var(--red-bg);
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--red);
+    color: #fff;
+  }
+
+  .feedback {
+    margin-top: 1.2rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    display: none;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .feedback.show { display: block; }
+
+  .feedback.success {
+    background: var(--green-bg);
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+
+  .feedback.error {
+    background: var(--red-bg);
+    border: 1px solid var(--red);
+    color: var(--red);
+  }
+
+  .feedback strong { font-weight: 600; }
+
+  .btn-next {
+    margin-top: 1.4rem;
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, #b8892a, var(--gold));
+    border: none;
+    border-radius: 10px;
+    color: #0d1117;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: none;
+  }
+
+  .btn-next:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-next.show { display: block; }
+
+  .result-screen {
+    text-align: center;
+    padding: 3rem 2rem;
+    display: none;
+  }
+
+  .result-screen.show { display: block; }
+  .quiz-area.hidden { display: none; }
+
+  .result-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .result-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .result-screen p {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .result-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .btn-restart {
+    padding: 0.9rem 2.5rem;
+    background: linear-gradient(135deg, #b8892a, var(--gold));
+    border: none;
+    border-radius: 10px;
+    color: #0d1117;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    margin-top: 1rem;
+  }
+
+  .btn-restart:hover { opacity: 0.88; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation: fadeIn 0.3s ease; }
+
+  footer {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="eyebrow">Pregătire Examen</div>
+    <h1>Marketing <span>Turistic</span></h1>
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-value" id="stat-correct">0</div>
+        <div class="stat-label">Corecte</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="stat-wrong">0</div>
+        <div class="stat-label">Greșite</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="quiz-area" id="quiz-area">
+    <div class="card" id="q-card">
+      <div class="q-meta">
+        <div class="q-number" id="q-number">Întrebarea 1</div>
+        <div class="q-badge" id="q-badge">77 întrebări</div>
+      </div>
+      <div class="question-text" id="question-text"></div>
+      <div class="options" id="options-list"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Următoarea întrebare →</button>
+    </div>
+  </div>
+
+  <div class="result-screen card" id="result-screen">
+    <div class="result-icon">🏆</div>
+    <h2>Sesiune completă!</h2>
+    <div class="result-score" id="result-score"></div>
+    <p id="result-msg"></p>
+    <button class="btn-restart" onclick="restartQuiz()">Reîncepe sesiunea</button>
+  </div>
+
+  <footer>Marketing Turistic · 77 întrebări grilă</footer>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  {
+    q: "Între componentele corporale ale produsului turistic sunt cuprinse:",
+    opts: ["Echipamentul turistic","Serviciile turistice","Ambianța, luxul, animația","Ansamblul informațiilor transmise publicului de ofertantul pachetului de servicii turistice"],
+    correct: 0
+  },
+  {
+    q: "Produsele turistice particulare pot fi concepute și comercializate pornind de la:",
+    opts: ["Existența unor evenimente (culturale, sportive, științifice, etc)","Sporirea circulației turistice interne și internaționale","Diversitatea motivațiilor purtătorilor cererii turistice (practicarea sporturilor, călătorii tematice, activități specifice vârstei a treia, etc)","Fluctuațiile înregistrate în cererea pentru turismul de sejur"],
+    correct: 0
+  },
+  {
+    q: "Cel mai integrat produs turistic este:",
+    opts: ["Produsul de tip eveniment","Produsul tip stațiune","Produsul forfetar","Produsul tip entitate geografică"],
+    correct: 2
+  },
+  {
+    q: "Produsele 'vaci de muls' sunt produse aflate în faza de:",
+    opts: ["Lansare","Creștere","Maturitate","Declin"],
+    correct: 2
+  },
+  {
+    q: "Reprezintă un factor fundamental al oricărui produs turistic:",
+    opts: ["Infrastructura generală a zonei","Infrastructura specific turistică","Patrimoniul turistic","Personalul turistic"],
+    correct: 2
+  },
+  {
+    q: "Poziționarea produsului turistic se referă la:",
+    opts: ["Localizarea produsului într-un mediu natural nepoluat","Localizarea produsului turistic aproape de piața emițătoare de turiști","Ocuparea unei poziții clare în mintea consumatorului","Toate acestea"],
+    correct: 2
+  },
+  {
+    q: "În formularea unei strategii pentru produsul turistic este esențial să existe:",
+    opts: ["Adaptarea produsului turistic la piața țintă","Poziționarea produsului","Identificarea produsului","Toate acestea"],
+    correct: 3
+  },
+  {
+    q: "Nivelul de integrare al unui produs turistic forfetar este:",
+    opts: ["Foarte ridicat","Variabil","În general, redus","Nici un răspuns nu este corect"],
+    correct: 0
+  },
+  {
+    q: "Mixul de marketing în turism cuprinde, în afara celor 4 P tradiționali:",
+    opts: ["Procesarea","Personalul prestator","Evidența fizică","Toate răspunsurile sunt corecte"],
+    correct: 3
+  },
+  {
+    q: "Elementele constitutive de bază ale produsului turistic sunt:",
+    opts: ["Transporturile turistice, mijloacele de cazare și alimentație","Factorii naturali și factorul uman","Dezvoltarea economică generală și demografică","Sistemul de acorduri internaționale și facilitățile privind dezvoltarea turismului intern"],
+    correct: 1
+  },
+  {
+    q: "Prin natura sa complexă, produsul turistic prezintă o serie de particularități în raport cu bunurile materiale, între care:",
+    opts: ["Produsul turistic se situează, de regulă, în imediata apropiere de piața cumpărătorilor","Toate componentele produsului turistic dețin același rol în decizia de achiziționare","Produsul turistic nu este favorizat în zonele cu un ridicat nivel de dezvoltare economică","Majoritatea componentelor produsului turistic nu pot fi stocate pentru a fi comercializate în sezoanele viitoare"],
+    correct: 3
+  },
+  {
+    q: "Rolul coordonării produselor turistice tip entitate geografică este asumat de:",
+    opts: ["Oficiile naționale de turism","Majoritatea agențiilor de turism private","Guvernele diferitelor țări emițătoare de fluxuri turistice","Niciun răspuns nu este corect"],
+    correct: 0
+  },
+  {
+    q: "Reprezintă o variantă strategică de distribuție:",
+    opts: ["Distribuția directă","Distribuția indirectă","Distribuția prin intermediar","Distribuția exclusivă"],
+    correct: 3
+  },
+  {
+    q: "Pentru a schimba comportamentul de cumpărare al turistului potențial, o reducere de preț trebuie:",
+    opts: ["Să fie semnificativă din punctul de vedere al consumatorului de produse turistice","Să fie nesemnificativă pentru turistul potențial","Să determine o reacție rapidă de răspuns din partea concurenței","Să nu conducă la o creștere importantă a cererii globale"],
+    correct: 0
+  },
+  {
+    q: "Pentru client, avantajul tarifării fiecărui serviciu elementar din pachetul de servicii constă în faptul că:",
+    opts: ["Clientul știe de la început cât îl va costa produsul turistic","Clientul plătește doar ce consumă","Întreprinderea nu cunoaște rentabilitatea reală a fiecărui serviciu","Nici un răspuns nu este corect"],
+    correct: 1
+  },
+  {
+    q: "Distribuția directă presupune:",
+    opts: ["Perceperea unui comision direct consumatorului","Distribuția fără intermediar a produsului turistic","Distribuția cu intermediar a produsului turistic","Nici un răspuns nu este corect"],
+    correct: 1
+  },
+  {
+    q: "Spre deosebire de relațiile publice:",
+    opts: ["Publicitatea nu subliniază avantajele particulare ale unui produs","Publicitatea permite un control mai riguros al mesajului","Publicitatea reprezintă un mijloc de orientare pe termen lung","Obiectivul publicității îl reprezintă acela al creării unui climat de încredere"],
+    correct: 1
+  },
+  {
+    q: "Distribuția extensivă presupune:",
+    opts: ["Organizarea și utilizarea unui număr mare de unități de distribuție care să asigure vânzarea produsului turistic al unei întreprinderi ofertante","Utilizarea rețelei de distribuție a unui singur intermediar pe o anumită piață sau arie geografică","Selecționarea unui număr limitat de agenți distribuitori","Nici un răspuns nu este corect"],
+    correct: 0
+  },
+  {
+    q: "Strategia de dezvoltare de produs turistic constă în:",
+    opts: ["Eforturile de stimulare a pieței actuale păstrând produsul turistic neschimbat","A face un produs mai atrăgător pentru utilizatorii actuali fără a opera modificări foarte mari sau foarte riscante","Cucerirea unor piețe absolut noi","Atragerea unei piețe turistice asemănătoare celor actuale"],
+    correct: 1
+  },
+  {
+    q: "Momentul plății unui serviciu de cazare turistică poate fi:",
+    opts: ["Numai înainte ca clientul să beneficieze de prestația turistică","Numai imediat după ce a fost beneficiarul prestației turistice","Înainte sau după ce a beneficiat de prestația turistică","Nici un răspuns nu este corect"],
+    correct: 2
+  },
+  {
+    q: "Elementele tangibile din structura unui produs turistic:",
+    opts: ["Sunt ușor de schimbat","Sunt ușor de schimbat pe termen scurt","Sunt greu de schimbat pe termen scurt","Nicio afirmație nu e corectă"],
+    correct: 2
+  },
+  {
+    q: "Produsele Dileme sunt caracterizate de:",
+    opts: ["Cotă de piață crescută, ritm de creștere a pieței mare","Cotă de piață crescută, ritm de creștere a pieței scăzut","Cotă de piață scăzut, ritm de creștere a pieței mare","Cotă de piață crescută, ritm de creștere a pieței scăzut"],
+    correct: 2
+  },
+  {
+    q: "Orientarea prețului produsului turistic în funcție de costuri și de oferta de produse turistice răspunde obiectivului firmei:",
+    opts: ["De maximizare a veniturilor pentru a acoperi integral costurile și a obține profit cât mai mare","De utilizare a capacității firmei la maximum","De atragere a unui număr cât mai mare de consumatori","Toate răspunsurile sunt corecte"],
+    correct: 0
+  },
+  {
+    q: "Asigurarea accesului turiștilor la produsele turistice depinde de:",
+    opts: ["Informare","Sistemul de rezervare","Condițiile de transport și cazare","Toate acestea"],
+    correct: 3
+  },
+  {
+    q: "Saloanele profesionale și târgurile sunt folosite ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Toate acestea"],
+    correct: 3
+  },
+  {
+    q: "Reducerile de preț sunt folosite ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Toate acestea"],
+    correct: 1
+  },
+  {
+    q: "Inventarierea elementelor actuale și potențiale ale produsului oferit de entitatea geografică trebuie realizată de:",
+    opts: ["Agențiile de turism","Unitățile de cazare hoteliere","Un organism cu caracter public (oficiile de turism, camere de comerț) sau particular (diferite asociații profesionale)","Niciun răspuns nu este corect"],
+    correct: 2
+  },
+  {
+    q: "Micromediul unei firme prestatoare de servicii turistice include:",
+    opts: ["Factorii politici și economici","Clienți, furnizori, concurenți, intermediari","Factori politici, economici, socio-culturali și tehnologici","Nici un răspuns nu este corect"],
+    correct: 1
+  },
+  {
+    q: "Ajustarea tarifelor unei pensiuni se poate face în funcție de:",
+    opts: ["Numărul camerelor rezervate","Perioada de cumpărare","Vârsta clienților","Toate variantele de mai sus"],
+    correct: 3
+  },
+  {
+    q: "Dezvoltarea continuă a personalului reprezintă o strategie specifică:",
+    opts: ["Marketingului interactiv","Nici un răspuns nu este corect","Marketingul intern","Marketingul extern"],
+    correct: 2
+  },
+  {
+    q: "Produsul turistic tip stațiune are ca puncte slabe:",
+    opts: ["Unicitatea și concentrarea în timp","Lipsa de flexibilitate","Faptul că este un produs turistic pasiv","Nivelul de integrare redus"],
+    correct: 1
+  },
+  {
+    q: "Reprezintă un factor permisiv al fiecărui produs turistic:",
+    opts: ["Infrastructura specifică turistică","Infrastructura generală a țării și cadrul instituțional","Personalul din turism","Patrimoniul turistic"],
+    correct: 1
+  },
+  {
+    q: "Produsele turistice Puncte critice sunt caracterizate de:",
+    opts: ["Cotă de piață ridicată, creștere redusă","Cotă de piață redusă, creștere redusă","Cotă de piață ridicată, creștere accentuată","Cotă de piață redusă, creștere accentuată"],
+    correct: 3
+  },
+  {
+    q: "Oferta de produse turistice forfetare are ca dezavantaj:",
+    opts: ["Reducerea riscului turistului de a avea surprize neplăcute pe durata voiajului turistic","Cunoașterea anticipată a programului călătoriei turistice și a costului acesteia","Simplificarea deciziei de cumpărare","Faptul că turistul este dependent de prestatorul de servicii"],
+    correct: 3
+  },
+  {
+    q: "Orientarea prețului produsului turistic în funcție de cerere răspunde obiectivul firmei:",
+    opts: ["De atragere a unui număr cât mai mare de consumatori","De maximizare a veniturilor pentru a acoperi integral costurile și a obține profit cât mai mare","De utilizare a capacității firmei la maximum","Toate răspunsurile sunt corecte"],
+    correct: 2
+  },
+  {
+    q: "Adaptarea ofertei la cererea turistică se poate realiza prin:",
+    opts: ["Nici un răspuns nu este corect","Cererea plății integrale cu 20 de zile înainte de data de începere a sejurului","O politică tarifară diferențiată în funcție de sezon","Refuzul rezervărilor cu mai puțin de 8 zile înainte de începerea sejurului"],
+    correct: 2
+  },
+  {
+    q: "Produsele care generează lichidități, dar necesită de asemenea și injectarea de cash-flow sunt:",
+    opts: ["Produsele Vaci de muls","Produsele Dileme","Produsele Vedetă","Produsele Pietre de Moară"],
+    correct: 1
+  },
+  {
+    q: "Aplicarea marketingului intern în turism presupune parcurgerea mai multor etape, între care:",
+    opts: ["Toate răspunsurile sunt corecte","Stabilirea unei culturi organizaționale","Diseminarea informațiilor de marketing către angajați","Implementarea unui sistem de recompense"],
+    correct: 0
+  },
+  {
+    q: "În cazul tarifării pachetului de servicii turistice, avantajul firmei de turism este acela că:",
+    opts: ["Clientul nu știe în avans cât va avea de plătit","Clientul știe de la început cât costă produsul turistic","O simplificare și un cost minim al plății","Niciun răspuns nu e corect"],
+    correct: 2
+  },
+  {
+    q: "Reprezintă o strategie de preț pentru produsele turistice noi:",
+    opts: ["Stabilirea unui preț inițial foarte scăzut pentru crearea prestigiului","Smântânirea pieței","Adaptarea prețurilor în funcție de categoriile de clienți","Nici un răspuns nu este corect"],
+    correct: 1
+  },
+  {
+    q: "Pentru atragerea unui număr cât mai mare de clienți, întreprinderea din turism:",
+    opts: ["Nici un răspuns nu e corect","Își va orienta prețul în funcție de concurență","Își va orienta prețul în funcție de oferta de servicii turistice","Își va orienta prețul în funcție de costuri"],
+    correct: 1
+  },
+  {
+    q: "Rolul și implicarea personalului în acțiunile de marketing ale firmei de turism se evidențiază prin utilizarea termenului de:",
+    opts: ["Marketing intern","Marketing extern","Marketing interactiv","Marketing dezvoltat"],
+    correct: 0
+  },
+  {
+    q: "Fixarea prețului produsului (serviciului) turistic în funcție de costuri are în vedere:",
+    opts: ["Evoluția și tendințele cererii turistice","Cheltuielile totale de prestații de servicii, distribuție și recuperarea integrală a costurilor prin reflectarea lor în prețul de vânzare a produsului","Existența pe piață a produselor concurente","Prețul pieței"],
+    correct: 1
+  },
+  {
+    q: "În procesul de vânzare a ofertei unui hotel pot fi utilizate diferite canale de distribuție, între care:",
+    opts: ["Dispecerat de cazare","Agenții de turism","Oficiu de turism","Toate răspunsurile sunt corecte"],
+    correct: 3
+  },
+  {
+    q: "Produsele turistice de tip eveniment au drept caracteristici:",
+    opts: ["Un ciclu de viață relativ însemnat","Absența oricărui risc pentru ofertanți","Costuri de organizare și promovare relativ scăzute","Un ciclu de viață foarte scăzut"],
+    correct: 3
+  },
+  {
+    q: "Unul dintre avantajele utilizării distribuției prin agenții de turism poate fi reprezentat de:",
+    opts: ["Costul scăzut al produsului turistic","Potențialul turistic al destinației","Independența agenției","Rolul de sursă de informare pe care îl are agenția"],
+    correct: 3
+  },
+  {
+    q: "Cinematograful, ca suport publicitar, este:",
+    opts: ["Un suport relativ costisitor","Un suport necostisitor","Este foarte des utilizat în promovarea turistică","Nici un răspuns nu este corect"],
+    correct: 0
+  },
+  {
+    q: "Una dintre următoarele afirmații nu este adevărată referitor la relațiile publice:",
+    opts: ["Relațiile publice sunt un proces care implică o definire precisă a obiectivelor promoționale","Relațiile publice presupun formularea unor informații corespunzătoare publicului căruia le sunt destinate","Comunicarea din cadrul relațiilor publice nu implică alegerea unor suporturi care să transmită informațiile","Relațiile publice nu vizează ce întreprinderea de turism să fie în asentimentul publicului în permanență"],
+    correct: 2
+  },
+  {
+    q: "Obiectivele politicii de promovare pot fi precizate:",
+    opts: ["Indiferent de politica de marketing a firmei","Numai dacă a fost definită strategia de marketing a firmei","Sub forma atingerii unei anumite cifre de afaceri","Niciun răspuns nu este corect"],
+    correct: 1
+  },
+  {
+    q: "Pentru client, avantajul principal al distribuției directe este reprezentat de:",
+    opts: ["Comisionul pe care îl câștigă intermediarul","Numărul de contacte care trebuie stabilit cu clienții este foarte mic","Costuri suplimentare de informare","Lipsa comisionului distribuitorului"],
+    correct: 3
+  },
+  {
+    q: "Dintre tehnicile de promovare a vânzărilor unei întreprinderi turistice nu fac parte:",
+    opts: ["Relațiile publice","Reducerile de preț","Broșurile, cataloagele, pliantele","Concursurile"],
+    correct: 0
+  },
+  {
+    q: "Distribuția exclusivă presupune:",
+    opts: ["Utilizarea rețelei de distribuție a unui singur intermediar pe o anumită arie geografică","Utilizarea unui număr limitat de agenți de distribuție","Utilizarea unui număr ridicat de agenți de distribuție dispersați pe o arie geografică întinsă","Niciun răspuns nu este corect"],
+    correct: 0
+  },
+  {
+    q: "Reducerile de preț pot fi utilizate ca metodă promoțională:",
+    opts: ["Niciodată","Pentru o perioadă lungă de timp","În perioadele cu cerere scăzută","Niciun răspuns nu este corect"],
+    correct: 2
+  },
+  {
+    q: "Avantajul firmei de turism în cazul tarifării fiecărui serviciu elementar din pachetul de servicii turistice consumat de client constă în faptul că:",
+    opts: ["Se simplifică modalitatea de plată","Sistemul de stabilire este greoi","Clientul plătește doar ce a consumat","Întreprinderea are un bun control asupra costurilor"],
+    correct: 3
+  },
+  {
+    q: "Publicitatea în turism:",
+    opts: ["Este o componentă a promovării vânzărilor","Este o componentă a relațiilor publice","Este o componentă a marketingului direct","Este o componentă a promovării în turism"],
+    correct: 3
+  },
+  {
+    q: "Publicul extern al relațiilor publice:",
+    opts: ["Este, de regulă, mai numeros decât cel intern","Este mai important decât cel intern","Este nesemnificativ comparativ cu cel intern","Nu este o componentă a mediului întreprinderii"],
+    correct: 0
+  },
+  {
+    q: "Spre deosebire de publicitate:",
+    opts: ["Relațiile publice au ca scop crearea unui climat de încredere între întreprinderi și clienții săi","Relațiile publice reprezintă un mijloc mai costisitor","Relațiile publice sunt un răspuns la atitudinea critică a anumitor consumatori față de activitățile promoționale clasice","Se adresează unui public țintă"],
+    correct: 0
+  },
+  {
+    q: "Care dintre factorii enunțați influențează alegerea suportului publicitar:",
+    opts: ["Nivelul tarifelor practicate și tipul prestațiilor oferite","Publicul vizat","Capacitatea unității","Toți aceștia la un loc"],
+    correct: 3
+  },
+  {
+    q: "Poziționarea produsului turistic ca produs de lux, mediu sau de masă se face în funcție de:",
+    opts: ["Conform unităților de alimentație","Confortul și tipologia unităților de cazare","Rețeaua de tratament","Rețeaua de agrement"],
+    correct: 1
+  },
+  {
+    q: "Publicitatea la locul vânzării este:",
+    opts: ["O tehnică de promovare a vânzărilor","O componentă a relațiilor publice","Un mijloc utilizat în marketingul direct","Toate răspunsurile sunt corecte"],
+    correct: 0
+  },
+  {
+    q: "Dintre avantajele marketingului direct prin poștă fac parte:",
+    opts: ["Selectivitatea","Personalizarea","Nicio limitare","Toate răspunsurile sunt corecte"],
+    correct: 3
+  },
+  {
+    q: "Orientarea prețului produsului turistic în funcție de concurență răspunde obiectivului firmei:",
+    opts: ["De maximizare a veniturilor pentru a acoperi integral costurile și a obține un profit cât mai mare","De utilizare a capacității firmei la maximum","De atragere a unui număr cât mai mare de consumatori","Toate răspunsurile sunt corecte"],
+    correct: 3
+  },
+  {
+    q: "Alegerea suportului publicitar în turism depinde de o serie de criterii precum:",
+    opts: ["Nivelul tarifelor practicate","Capacitatea unității","Modul de comercializare a produsului turistic","Toate acestea"],
+    correct: 3
+  },
+  {
+    q: "Pregătirea profesională a agenților de turism este folosită ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Toate acestea"],
+    correct: 0
+  },
+  {
+    q: "Seminariile și călătoriile de familiarizare sunt folosite ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Toate acestea"],
+    correct: 0
+  },
+  {
+    q: "Broșurile și cataloagele sunt folosite ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Toate acestea"],
+    correct: 0
+  },
+  {
+    q: "Concursurile sunt folosite ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Toate acestea"],
+    correct: 1
+  },
+  {
+    q: "Ofertele speciale sunt folosite ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Toate acestea"],
+    correct: 1
+  },
+  {
+    q: "Războiul prețurilor este folosit ca tehnică de promovare a vânzărilor pentru:",
+    opts: ["O mai bună cunoaștere a produsului turistic","Incitarea la cumpărarea produsului turistic","Creșterea fidelității față de marcă","Niciun răspuns nu este corect"],
+    correct: 1
+  },
+  {
+    q: "Identitatea fundamentală a produsului turistic este legată de:",
+    opts: ["Poziția unică pe care o deține produsul","Atributele care-l diferențiază de produsele concurente","Satisfacțiile pe care le oferă turiștilor","Toate acestea"],
+    correct: 3
+  },
+  {
+    q: "Nivelul de integrare al unui produs turistic particular este:",
+    opts: ["Foarte ridicat","Variabil","În general, redus","Niciun răspuns nu este corect"],
+    correct: 2
+  },
+  {
+    q: "Transporturile turistice sunt o componentă a:",
+    opts: ["Elementelor constitutive de bază ale produsului turistic","Infrastructurii generale a țării/zonei","Infrastructurii specifice turistice","Niciuna din variantele de mai sus"],
+    correct: 2
+  },
+  {
+    q: "Dintre strategiile specifice marketingului intern nu fac parte:",
+    opts: ["Recrutarea angajaților potriviți","Stabilirea unui preț inițial foarte ridicat și reducerea treptată în timp a lui","Asigurarea sistemului suport necesar","Păstrarea celor mai buni salariați"],
+    correct: 1
+  },
+  {
+    q: "Dintre funcțiile-cheie ale unui canal de distribuție în turism fac parte:",
+    opts: ["Informarea","Negocierea","Promovarea","Toate acestea"],
+    correct: 3
+  },
+  {
+    q: "Care dintre următoarele aspecte reprezintă un inconvenient al distribuției directe?",
+    opts: ["Controlul permanent asupra vânzărilor","Reducerea substanțială a costurilor de distribuție","Costurile ridicate pentru menținerea unei forțe de vânzare proprii","Toate variantele de mai sus"],
+    correct: 2
+  },
+  {
+    q: "Sponsorizarea reprezintă o tehnică de promovare specifică:",
+    opts: ["Relațiilor publice","Publicității","Marketingului direct","Promovării vânzărilor"],
+    correct: 0
+  },
+  {
+    q: "Reprezintă un factor decisiv al oricărui produs turistic:",
+    opts: ["Infrastructura generală a țării","Infrastructura turistică","Patrimoniul turistic","Cadrul instituțional"],
+    correct: 1
+  }
+];
+
+const LETTERS = ['A', 'B', 'C', 'D'];
+
+let queue = [];
+let answered = 0;
+let correct = 0;
+let wrong = 0;
+let current = null;
+let answered_this = false;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function initQueue() {
+  queue = ALL_QUESTIONS.map((q, i) => i);
+}
+
+function updateStats() {
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-wrong').textContent = wrong;
+  document.getElementById('stat-total').textContent = answered;
+  const pct = Math.round((answered / ALL_QUESTIONS.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function loadQuestion() {
+  if (queue.length === 0) {
+    showResult();
+    return;
+  }
+  const idx = queue.shift();
+  current = { ...ALL_QUESTIONS[idx], idx };
+  answered_this = false;
+
+  document.getElementById('q-number').textContent = `Întrebarea ${answered + 1} din ${ALL_QUESTIONS.length}`;
+  document.getElementById('q-badge').textContent = `${queue.length + 1} rămase`;
+  document.getElementById('question-text').textContent = current.q;
+
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  current.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.onclick = () => selectAnswer(i);
+    btn.innerHTML = `<span class="option-letter">${LETTERS[i]}</span><span>${opt}</span>`;
+    list.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+
+  document.getElementById('btn-next').classList.remove('show');
+}
+
+function selectAnswer(chosen) {
+  if (answered_this) return;
+  answered_this = true;
+  answered++;
+
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const isCorrect = chosen === current.correct;
+
+  if (isCorrect) {
+    correct++;
+    buttons[chosen].classList.add('correct');
+    showFeedback(true, null);
+  } else {
+    wrong++;
+    buttons[chosen].classList.add('wrong');
+    buttons[current.correct].classList.add('correct');
+    showFeedback(false, current.opts[current.correct], LETTERS[current.correct]);
+  }
+
+  updateStats();
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function showFeedback(ok, correctOpt, letter) {
+  const fb = document.getElementById('feedback');
+  if (ok) {
+    fb.className = 'feedback success show';
+    fb.innerHTML = '✓ <strong>Corect!</strong> Bravo, răspuns excelent.';
+  } else {
+    fb.className = 'feedback error show';
+    fb.innerHTML = `✗ <strong>Greșit.</strong> Răspunsul corect era: <strong>${letter}. ${correctOpt}</strong>`;
+  }
+}
+
+function nextQuestion() {
+  loadQuestion();
+}
+
+function showResult() {
+  document.getElementById('quiz-area').classList.add('hidden');
+  const rs = document.getElementById('result-screen');
+  rs.classList.add('show');
+  const pct = Math.round((correct / ALL_QUESTIONS.length) * 100);
+  document.getElementById('result-score').textContent = `${correct} / ${ALL_QUESTIONS.length}`;
+  let msg = '';
+  if (pct >= 85) msg = `Excelent! Scor ${pct}% — ești pregătit pentru examen! 🎓`;
+  else if (pct >= 60) msg = `Bine! Scor ${pct}% — mai exersează puțin și vei fi gata.`;
+  else msg = `Scor ${pct}% — continuă să exersezi, vei reuși!`;
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('progress-fill').style.width = '100%';
+}
+
+function restartQuiz() {
+  correct = 0; wrong = 0; answered = 0;
+  updateStats();
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('result-screen').classList.remove('show');
+  document.getElementById('quiz-area').classList.remove('hidden');
+  initQueue();
+  loadQuestion();
+}
+
+initQueue();
+loadQuestion();
+updateStats();
+</script>
+</body>
+</html>
