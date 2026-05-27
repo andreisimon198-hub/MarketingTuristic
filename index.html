@@ -813,7 +813,7 @@ function shuffle(arr) {
 }
 
 function initQueue() {
-  queue = ALL_QUESTIONS.map((q, i) => i);
+  queue = shuffle(ALL_QUESTIONS.map((q, i) => i));
 }
 
 function updateStats() {
